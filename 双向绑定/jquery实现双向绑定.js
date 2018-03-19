@@ -71,6 +71,7 @@ function User(uid) {
 
 //现在，无论我们什么时候想把模型的属性绑定到UI的一部分上，我们只需要在相应的HTML元素上设置一个合适的data属性即可。
 var user = new User('name')
+console.log(user)
 user.set('name', 888)
 
 
