@@ -8,9 +8,16 @@
 		<div id="app">
 			<h2>双向绑定实现</h2>
 			<div>
-				<input type="text" data-bind-name="name" />
-				<textarea data-bind-name="name"></textarea>
+				标签一：<input type="text" data-bind-name="name" />
+				<br><br>
+				标签二：<textarea data-bind-name="name"></textarea>
 			</div>
+			<p>使用手册</p>
+			<ol>
+				<li>标签通过自定义属性 data-bind-name = name，与模型对象 user 进行双向绑定</li>
+				<li>view绑定model：标签输入之后，可在浏览器命令行输入 console.log(user.attributes) 查看模型对象的值</li>
+				<li>model绑定view：在浏览器命令行输入 user.set('name', 123456)，标签内的值随即进行变化</li>
+			</ol>
 		</div>
 		<!-- <script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="./jquery实现双向绑定.js"></script> -->

@@ -7,29 +7,30 @@
  */
 
 function DataBinderHtml(object_id) {
-	console.log(1)
-	//创建意见简单的pubsub对象
+
+	//创建pubsub对象
 	var pubSub = {
 		callbacks: {},
+		//将变化代理到pubsub发布者
 		on: function(msg, callback) {
-			console.log(2)
 			this.callbacks[msg] = this.callbacks[msg] || []
 			this.callbacks[msg].push(callback)
 		},
+		//将变化传播到ui页面制定绑定到元素上
 		publish: function(msg) {
-			console.log(3)
 			this.callbacks[msg] = this.callbacks[msg] || []
 			for(var i=0, len=this.callbacks[msg].length; i<len; i++) {
 				this.callbacks[msg][i].apply(this, arguments)
 			}
 		}
 	}
+	//ui页面元素自定义data属性
 	var data_attr = "data-bind-" + object_id
+	//事件标志符
 	var message = object_id + ":change"
 
-	console.log(4)
+	//变化代理事件函数
 	var changeHandler = function(event) {
-		console.log(5)
 		var target = event.target || event.srcElement
 		var prop_name = target.getAttribute(data_attr)
 		if(prop_name && prop_name !== "") {
@@ -45,12 +46,9 @@ function DataBinderHtml(object_id) {
 	}
 
 	//pubSub对象将变化传播到所有绑定元素
-	console.log(6)
 	pubSub.on(message, function(event, prop_name, new_val) {
-		console.log(7)
 		var elements = document.querySelectorAll('[' + data_attr + '=' + prop_name + ']')
 		var tag_name
-
 		for(var i=0, len=elements.length; i<len; i++) {
 			tag_name = elements[i].tagName.toLowerCase()
 			if(tag_name === 'input' || tag_name === 'textarea' || tag_name === 'select') {
@@ -60,42 +58,37 @@ function DataBinderHtml(object_id) {
 			}
 		}
 	})
-
-	console.log(8)
+	
 	return pubSub
-
 }
 
 //User模型
 function User(uid) {
-	console.log(10)
+
+	//创建一个pubSub实例，用于监听html变化，将变化代理到pubSub实例，实例对象将变化传播到所有绑定元素
 	var binder = new DataBinderHtml(uid)
 
-	console.log(11)
+	//创建user模型
 	user = {
+		//对象属性集合
 		attributes: {},
 
-		//属性设置使用数据绑定器PubSub来发布变化
+		//属性设置使用数据绑定器将变化代理到PubSub对象进行发布
+		//代理到pubSub对象时，传递的参数有 this ，用于区分变化来自“属性设置”（即调用user.set()），还是来自“元素的change事件”
 		set: function(attr_name, val) {
-			console.log(12)
 			this.attributes[attr_name] = val;
-			console.log('a')
 			binder.publish(uid + ':change', attr_name, val, this)
-			console.log(user.attributes)
 		},
 
 		get: function(attr_name) {
-			console.log(13)
 			return this.attributes[attr_name]
 		},
 
 		_binder: binder
 	}
 
-	console.log(14)
+	//向发布者pubSub对象，注册设置属性事件，以便发布者进行统一发布
 	binder.on(uid + ':change', function(event, attr_name, new_val, initiator) {
-		console.log(15)
-		console.log(initiator !== user)
 		if(initiator !== user) {
 			user.set(attr_name, new_val)
 		}
@@ -105,7 +98,5 @@ function User(uid) {
 }
 
 //现在，无论我们什么时候想把模型的属性绑定到UI的一部分上，我们只需要在相应的HTML元素上设置一个合适的data属性即可。
-console.log(17)
 var user = new User('name')
-console.log(16)
 user.set('name', 888)
