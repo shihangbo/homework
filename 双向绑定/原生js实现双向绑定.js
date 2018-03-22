@@ -63,7 +63,7 @@ function DataBinderHtml(object_id) {
 }
 
 //User模型
-function User(uid) {
+function Model(uid) {
 
 	//创建一个pubSub实例，用于监听html变化，将变化代理到pubSub实例，实例对象将变化传播到所有绑定元素
 	var binder = new DataBinderHtml(uid)
@@ -98,5 +98,5 @@ function User(uid) {
 }
 
 //现在，无论我们什么时候想把模型的属性绑定到UI的一部分上，我们只需要在相应的HTML元素上设置一个合适的data属性即可。
-var user = new User('name')
-user.set('name', 888)
+var model = new Model('name')
+model.set('name', 888)
