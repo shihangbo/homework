@@ -31,8 +31,18 @@ const ReactDOM = {
 		//给获取的元素添加属性
 		if (vnode.attrs) {
 			Object.keys(vnode.attrs).forEach(key => {
+
+				const value = vnode.attrs[key]
+
 				if (key === 'className') key = 'class'
-				dom.setAttribute(key, vnode.attrs[key])
+
+				//如果是事件监听函数，则直接附加到dom上
+				if (typeof value === 'function') {
+					dom[key.toLowerCase()] = value
+				} else {
+					dom.setAttribute(key, value)
+				}
+
 			})
 		}
 		//遍历当前虚拟dom的子元素，递归生成各子元素
