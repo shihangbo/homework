@@ -3,12 +3,18 @@
  * @author watson
  * @version V1.0
  * @since 2018/03/24
- * @content 简单实现react的jsx和虚拟dom
+ * @content 1 简单实现react的jsx和虚拟dom
+ 	 @content 2 实现组件功能
  */
 
 const React = {
 	// creactElement方法返回的对象记录这个dom节点的所有信息，换言之，通过它就可以生成真正的dom，这个记录信息的对象就是虚拟dom
 	createElement: function(tag, attrs, ...children) {
+		//组件化之路 如果tag是一个方法，那么它是一个组件
+		if (typeof tag === 'function') {
+			return tag(attrs || {})
+		}
+
 		return {
 			tag,
 			attrs,
@@ -21,7 +27,7 @@ const ReactDOM = {
 	//将虚拟dom渲染成真实dom
 	vnodeToRealDom: function(vnode, container) {
 		//当vnode为字符串时，渲染结果是一段文本
-		if (typeof vnode === 'string') {
+		if (typeof vnode === 'string' || typeof vnode === 'number') {
 			const textNode = document.createTextNode(vnode)
 			return container.appendChild(textNode)
 		}
@@ -59,10 +65,29 @@ const ReactDOM = {
 	}
 }
 
-ReactDOM.render(
-	<h1>hello <span>watson!</span></h1>,
-	document.getElementById('root')
-)
+//组件化之路 函数组件Welcome
+function Welcome(props) {
+	return (<h1>hello, {props.name}</h1>)
+}
+//组件化之路 函数组件App
+function App () {
+	return (
+		<div>
+			<Welcome name='111' />
+			<Welcome name='222' />
+			<Welcome name='333' />
+		</div>
+	)
+}
+const element = <Welcome name='WATSON' />
+const app = <App />
+
+//组件化之路 类组件 
+
+// ReactDOM.render(
+// 	<h1>hello <span>watson!</span></h1>,
+// 	document.getElementById('root')
+// )
 
 function tick() {
 	const element = (
@@ -79,3 +104,4 @@ function tick() {
 }
 
 setInterval(tick, 1000)
+
