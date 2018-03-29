@@ -2,8 +2,8 @@
 /**
  * @author watson
  * @version V1.0
- * @since 2018/03/24
- * @content 1 简单实现react的jsx和虚拟dom
+ * @since 2018/03/29
+ * @content 实现组件功能
  */
 
 const React = {
@@ -12,6 +12,12 @@ const React = {
 }
 
 function createElement(tag, attrs, ...children) {
+	// console.log(tag)
+	// console.log(attrs)
+	// console.log(children)
+	if(typeof tag === 'function') {
+		return tag(attrs || {})
+	}
 	return {
 		tag, attrs, children
 	}
@@ -53,41 +59,23 @@ function render(vnode, container) {
 
 }
 
-//组件化之路 函数组件Welcome
 function Welcome(props) {
-	return (<h1>hello, {props.name}</h1>)
+	return <h1>hello, {props.name}</h1>
 }
-//组件化之路 函数组件App
-function App () {
+const element = <Welcome name='watson'/>
+
+function App(props) {
 	return (
 		<div>
-			<Welcome name='111' />
-			<Welcome name='222' />
-			<Welcome name='333' />
+			<Welcome name={props.name + '111'}/>
+			<Welcome name={props.name + '222'}/>
+			<Welcome name={props.name + '333'}/>
 		</div>
 	)
 }
-const element = <Welcome name='WATSON' />
-const app = <App />
+const app = <App name='watson'/>
 
-
-function onClick() {
-	console.log('方法在哪里注册的？')
-}
-
-function tick() {
-	const element = (
-		<div>
-			<h1 onClick={() => onClick()}>hello watson!</h1>
-			<h2>it is {new Date().toLocaleTimeString()}</h2>
-		</div>
-	)
-
-	ReactDOM.render(
-		element,
-		document.getElementById('root')
-	)
-}
-
-setInterval(tick, 1000)
-
+ReactDOM.render(
+	app,
+	document.getElementById('root')
+)
