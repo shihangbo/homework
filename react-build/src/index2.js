@@ -15,9 +15,17 @@ function createElement(tag, attrs, ...children) {
 	// console.log(tag)
 	// console.log(attrs)
 	// console.log(children)
-	if(typeof tag === 'function') {
+	//定义函数组件
+	// if(typeof tag === 'function') {
+	// 	return tag(attrs || {})
+	// }
+
+	if(tag.prototype && tag.prototype.render) { //类组件返回
+		return new tag(attrs)
+	} else if(typeof tag === 'function') { //函数组件返回
 		return tag(attrs || {})
 	}
+	
 	return {
 		tag, attrs, children
 	}
@@ -31,6 +39,32 @@ const ReactDOM = {
 }
 
 function render(vnode, container) {
+	console.log('-----------')
+	console.log(vnode)
+	console.log('-----------')
+
+	if(vnode === undefined) return
+
+	if ( vnode.isReactComponent ) {
+		const component = vnode;
+
+		if ( component._container ) {
+				if ( component.componentDidUpdate ) {
+						component.componentDidUpdate()
+				}
+		} else if ( component.componentDidMount ) {
+				component.componentDidMount()
+		}
+
+		component._container = container   // 保存父容器信息，用于更新
+
+		vnode = component.render()
+	}
+
+	console.log('-----------')
+	console.log(vnode)
+	console.log('-----------')
+
 	if(typeof vnode === 'string' || typeof vnode === 'number') {
 		const textNode = document.createTextNode(vnode)
 		return container.appendChild(textNode)
@@ -59,23 +93,67 @@ function render(vnode, container) {
 
 }
 
-function Welcome(props) {
-	return <h1>hello, {props.name}</h1>
-}
-const element = <Welcome name='watson'/>
+//函数组件
+// function Welcome(props) {
+// 	return <h1>hello, {props.name}</h1>
+// }
+// const element = <Welcome name='watson'/>
 
-function App(props) {
-	return (
-		<div>
-			<Welcome name={props.name + '111'}/>
-			<Welcome name={props.name + '222'}/>
-			<Welcome name={props.name + '333'}/>
-		</div>
-	)
+// function App(props) {
+// 	return (
+// 		<div>
+// 			<Welcome name={props.name + '111'}/>
+// 			<Welcome name={props.name + '222'}/>
+// 			<Welcome name={props.name + '333'}/>
+// 		</div>
+// 	)
+// }
+// const app = <App name='watson'/>
+
+//类组件
+class Component {
+	constructor(props = {}) {
+		this.isReactComponent = true
+		this.state = {}
+		this.props = props
+	}
+
+	setState(stateChange) {
+		Object.assign(this.state, stateChange)
+		console.log('-----------')
+		console.log(this)
+		console.log(this._container)
+		console.log('-----------')
+		if(this._container) {
+			ReactDOM.render(this, this._container)
+		}
+	}
 }
-const app = <App name='watson'/>
+
+class Welcome extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+	render() {
+		return <h1>hello, {this.props.name}</h1>
+	}
+}
+class App extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+	render() {
+		return (
+			<div>
+				<Welcome name="111"/>
+			</div>
+		)
+	}
+}
 
 ReactDOM.render(
-	app,
+	<App/>,
 	document.getElementById('root')
 )
