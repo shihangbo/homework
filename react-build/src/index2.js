@@ -110,7 +110,7 @@ function render(vnode, container) {
 // }
 // const app = <App name='watson'/>
 
-//类组件
+//定义 Component类组件
 class Component {
 	constructor(props = {}) {
 		this.isReactComponent = true
@@ -157,3 +157,17 @@ ReactDOM.render(
 	<App/>,
 	document.getElementById('root')
 )
+
+
+/**
+ * 拓展1
+ * class
+ * 
+ */
+
+/**
+ * 拓展2
+ * extends
+ * 
+ * 
+ */
