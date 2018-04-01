@@ -39,9 +39,9 @@ const ReactDOM = {
 }
 
 function render(vnode, container) {
-	console.log('-----------')
-	console.log(vnode)
-	console.log('-----------')
+	// console.log('-----------')
+	// console.log(vnode)
+	// console.log('-----------')
 
 	if(vnode === undefined) return
 
@@ -61,9 +61,9 @@ function render(vnode, container) {
 		vnode = component.render()
 	}
 
-	console.log('-----------')
-	console.log(vnode)
-	console.log('-----------')
+	// console.log('-----------')
+	// console.log(vnode)
+	// console.log('-----------')
 
 	if(typeof vnode === 'string' || typeof vnode === 'number') {
 		const textNode = document.createTextNode(vnode)
@@ -94,21 +94,19 @@ function render(vnode, container) {
 }
 
 //函数组件
-// function Welcome(props) {
-// 	return <h1>hello, {props.name}</h1>
-// }
-// const element = <Welcome name='watson'/>
+function Welcome(props) {
+	return <h1>hello, {props.name}</h1>
+}
 
-// function App(props) {
-// 	return (
-// 		<div>
-// 			<Welcome name={props.name + '111'}/>
-// 			<Welcome name={props.name + '222'}/>
-// 			<Welcome name={props.name + '333'}/>
-// 		</div>
-// 	)
-// }
-// const app = <App name='watson'/>
+function App(props) {
+	return (
+		<div>
+			<Welcome name={props.name + '111'}/>
+			<Welcome name={props.name + '222'}/>
+			<Welcome name={props.name + '333'}/>
+		</div>
+	)
+}
 
 //定义 Component类组件
 class Component {
@@ -120,41 +118,41 @@ class Component {
 
 	setState(stateChange) {
 		Object.assign(this.state, stateChange)
-		console.log('-----------')
-		console.log(this)
-		console.log(this._container)
-		console.log('-----------')
+		// console.log('-----------')
+		// console.log(this)
+		// console.log(this._container)
+		// console.log('-----------')
 		if(this._container) {
 			ReactDOM.render(this, this._container)
 		}
 	}
 }
 
-class Welcome extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {}
-	}
-	render() {
-		return <h1>hello, {this.props.name}</h1>
-	}
-}
-class App extends Component {
-	constructor(props) {
-		super(props)
-		this.state = {}
-	}
-	render() {
-		return (
-			<div>
-				<Welcome name="111"/>
-			</div>
-		)
-	}
-}
+// class Welcome extends Component {
+// 	constructor(props) {
+// 		super(props)
+// 		this.state = {}
+// 	}
+// 	render() {
+// 		return <h1>hello, {this.props.name}</h1>
+// 	}
+// }
+// class App extends Component {
+// 	constructor(props) {
+// 		super(props)
+// 		this.state = {}
+// 	}
+// 	render() {
+// 		return (
+// 			<div>
+// 				<Welcome name="111"/>
+// 			</div>
+// 		)
+// 	}
+// }
 
 ReactDOM.render(
-	<App/>,
+	<App name='watson'/>,
 	document.getElementById('root')
 )
 
