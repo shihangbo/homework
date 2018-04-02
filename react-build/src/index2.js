@@ -49,11 +49,11 @@ function render(vnode, container) {
 		const component = vnode;
 
 		if ( component._container ) {
-				if ( component.componentDidUpdate ) {
-						component.componentDidUpdate()
+				if ( component.componentWillUpdate ) {
+						component.componentWillUpdate()
 				}
-		} else if ( component.componentDidMount ) {
-				component.componentDidMount()
+		} else if ( component.componentWillMount ) {
+				component.componentWillMount()
 		}
 
 		component._container = container   // 保存父容器信息，用于更新
@@ -151,8 +151,34 @@ class Component {
 // 	}
 // }
 
+class Couter extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {num: 0}
+	}
+
+	componentWillUpdate() {
+		console.log('update')
+	}
+	componentWillMount() {
+		console.log('mount')
+	}
+	onClick() {
+		this.setState({num: this.state.num+1})
+	}
+
+	render() {
+		return (
+			<div onClick={() => this.onClick()}>
+				<h1>number: {this.state.num}</h1>
+				<button>add</button>
+			</div>
+		)
+	}
+}
+
 ReactDOM.render(
-	<App name='watson'/>,
+	<Couter />,
 	document.getElementById('root')
 )
 
