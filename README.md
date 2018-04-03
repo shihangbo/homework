@@ -8,9 +8,7 @@
 4. 从零开始写一个react
 	 * JSX和虚拟DOM https://github.com/hujiulong/blog/issues/4
 	 # 实现组件功能  https://github.com/hujiulong/blog/issues/5
-	 @ 1
-	 $ 2
-	 % 3
-	 ^ 4
-	 & 5
-	 * 6
+	<ul>
+		<li>1</li>
+		<li>1</li>
+	</ul>
