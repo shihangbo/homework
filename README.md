@@ -8,3 +8,5 @@
 4. 从零开始写一个react
 	 * JSX和虚拟DOM https://github.com/hujiulong/blog/issues/4
 	 * 实现组件功能  https://github.com/hujiulong/blog/issues/5
+5. 	Vue源码学习
+	 * 来自勾三股四  http://jiongks.name/blog/vue-code-review/

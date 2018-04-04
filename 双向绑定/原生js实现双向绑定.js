@@ -4,6 +4,7 @@
  * @version V1.0
  * @since 2018/03/16
  * @content 使用原生的 javascript 来实现一个自定义的 PubSub 以及观察 DOM事件
+ * 订阅：subscriptiton，发布：publish
  */
 
 function DataBinderHtml(object_id) {
