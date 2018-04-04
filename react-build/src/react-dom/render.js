@@ -1,6 +1,7 @@
 
 function _render(vnode, container) {
   if (vnode === undefined) return
+  
   if (vnode.isReactComponent) {
     const component = vnode
     if (component._container) {

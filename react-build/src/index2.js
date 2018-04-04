@@ -6,92 +6,34 @@
  * @content 实现组件功能
  */
 
-const React = {
-	// creactElement方法返回的对象记录这个dom节点的所有信息，换言之，通过它就可以生成真正的dom，这个记录信息的对象就是虚拟dom
-	createElement
-}
+import ReactDOM from './react-dom'
+import React from './react'
 
-function createElement(tag, attrs, ...children) {
-	// console.log(tag)
-	// console.log(attrs)
-	// console.log(children)
-	//定义函数组件
-	// if(typeof tag === 'function') {
-	// 	return tag(attrs || {})
-	// }
+// const React = {
+// 	// creactElement方法返回的对象记录这个dom节点的所有信息，换言之，通过它就可以生成真正的dom，这个记录信息的对象就是虚拟dom
+// 	createElement
+// }
 
-	if(tag.prototype && tag.prototype.render) { //类组件返回
-		return new tag(attrs)
-	} else if(typeof tag === 'function') { //函数组件返回
-		return tag(attrs || {})
-	}
+// function createElement(tag, attrs, ...children) {
+// 	// console.log(tag)
+// 	// console.log(attrs)
+// 	// console.log(children)
+// 	//定义函数组件
+// 	// if(typeof tag === 'function') {
+// 	// 	return tag(attrs || {})
+// 	// }
+
 	
-	return {
-		tag, attrs, children
-	}
-}
-
-const ReactDOM = {
-	render: (vnode, container) => {
-		container.innerHTML = ''
-		return render(vnode, container)
-	}
-}
-
-function render(vnode, container) {
-	// console.log('-----------')
-	// console.log(vnode)
-	// console.log('-----------')
-
-	if(vnode === undefined) return
-
-	if ( vnode.isReactComponent ) {
-		const component = vnode;
-
-		if ( component._container ) {
-				if ( component.componentWillUpdate ) {
-						component.componentWillUpdate()
-				}
-		} else if ( component.componentWillMount ) {
-				component.componentWillMount()
-		}
-
-		component._container = container   // 保存父容器信息，用于更新
-
-		vnode = component.render()
-	}
-
-	// console.log('-----------')
-	// console.log(vnode)
-	// console.log('-----------')
-
-	if(typeof vnode === 'string' || typeof vnode === 'number') {
-		const textNode = document.createTextNode(vnode)
-		return container.appendChild(textNode)
-	}
-
-	const dom = document.createElement(vnode.tag)
-
-	if(vnode.attrs) {
-		Object.keys(vnode.attrs).forEach(key => {
-			const value = vnode.attrs[key]
-
-			if(key === 'className') key = 'class'
-
-			if(typeof value === 'function') {
-				dom[key.toLowerCase()] = value
-			} else {
-				dom.setAttribute(key, value)
-			}
-
-		})
-	}
-
-	vnode.children.forEach(child => render(child, dom))
-
-	return container.appendChild(dom)
-
-}
+// 	if(tag.prototype && tag.prototype.render) { //类组件返回
+// 		return new tag(attrs)
+// 	} else if(typeof tag === 'function') { //函数组件返回
+// 		return tag(attrs || {})
+// 	}
+	
+// 	return {
+// 		tag, attrs, children
+// 	}
+// }
 
 //函数组件
 function Welcome(props) {
@@ -109,24 +51,24 @@ function App(props) {
 }
 
 //定义 Component类组件
-class Component {
-	constructor(props = {}) {
-		this.isReactComponent = true
-		this.state = {}
-		this.props = props
-	}
+// class Component {
+// 	constructor(props = {}) {
+// 		this.isReactComponent = true
+// 		this.state = {}
+// 		this.props = props
+// 	}
 
-	setState(stateChange) {
-		Object.assign(this.state, stateChange)
-		// console.log('-----------')
-		// console.log(this)
-		// console.log(this._container)
-		// console.log('-----------')
-		if(this._container) {
-			ReactDOM.render(this, this._container)
-		}
-	}
-}
+// 	setState(stateChange) {
+// 		Object.assign(this.state, stateChange)
+// 		// console.log('-----------')
+// 		// console.log(this)
+// 		// console.log(this._container)
+// 		// console.log('-----------')
+// 		if(this._container) {
+// 			ReactDOM.render(this, this._container)
+// 		}
+// 	}
+// }
 
 // class Welcome extends Component {
 // 	constructor(props) {
@@ -151,7 +93,7 @@ class Component {
 // 	}
 // }
 
-class Couter extends Component {
+class Counte extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {num: 0}
@@ -178,27 +120,6 @@ class Couter extends Component {
 }
 
 ReactDOM.render(
-	<Couter />,
+	<Counte />,
 	document.getElementById('root')
 )
-
-
-/**
- * 拓展1
- * class
- * 
- */
-
-/**
- * 拓展2
- * extends
- * 
- * 
- */
-
- /**
- * 拓展3
- * 
- * 
- * 
- */
