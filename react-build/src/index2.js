@@ -50,25 +50,6 @@ function App(props) {
 	)
 }
 
-//定义 Component类组件
-// class Component {
-// 	constructor(props = {}) {
-// 		this.isReactComponent = true
-// 		this.state = {}
-// 		this.props = props
-// 	}
-
-// 	setState(stateChange) {
-// 		Object.assign(this.state, stateChange)
-// 		// console.log('-----------')
-// 		// console.log(this)
-// 		// console.log(this._container)
-// 		// console.log('-----------')
-// 		if(this._container) {
-// 			ReactDOM.render(this, this._container)
-// 		}
-// 	}
-// }
 
 // class Welcome extends Component {
 // 	constructor(props) {
