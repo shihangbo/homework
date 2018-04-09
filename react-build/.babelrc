@@ -2,7 +2,7 @@
     "presets": ["env"],
     "plugins": [
         ["transform-react-jsx", {
-            "pragma": "React.createElement"
+            "pragma": "React.createElement" // pragma项，定义jsx转换方法的名称
         }]
     ]
 }
