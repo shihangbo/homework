@@ -18,16 +18,32 @@ function createElement(tag, attrs, ...children) {
 }
 
 const ReactDOM = {
-	render: (vnode, container) => {
-		container.innerHTML = ''
-		return render(vnode, container)
-	}
+	render: render,
+	renderComponent: renderComponent
 }
 
 function render(vnode, container) {
-	if(typeof vnode === 'string' || typeof vnode === 'number') {
-		const textNode = document.createTextNode(vnode)
-		return container.appendChild(textNode)
+	return container.appendChild(_render(vnode))
+}
+
+function _render(vnode, container) {
+
+	if (vnode === undefined || vnode === null || typeof vnode === 'boolean') vnode = ''
+
+	if (typeof vnode === 'number') vnode = String(vnode)
+
+	if (typeof vnode === 'string') {
+		let textNode = document.createTextNode(vnode)
+		return textNode
+	}
+
+	if (typeof vnode.tag === 'function') {
+		// createComponent方法用来创建组件实例，并且将函数定义组件拓展为类定义组件进行处理，以免其他地方需要区分不同定义方式
+		const component = createComponent(vnode.tag, vnode.attrs)
+		// setComponentProps方法用来更新props，在其中可以实现componentWillMount，componentWillReceiveProps两个生命周期方法
+		setComponentProps(component, vnode.attrs)
+
+		return component.base
 	}
 
 	const dom = document.createElement(vnode.tag)
@@ -42,8 +58,59 @@ function render(vnode, container) {
 
 	vnode.children.forEach(child => render(child, dom))
 
-	return container.appendChild(dom)
+	return dom
 
+}
+
+function createComponent(component, props) {
+	let inst
+
+	if (component.prototype && component.prototype.render) {
+		inst = new component(props)
+	} else {
+		inst = new Component(props)
+		inst.constructor = component
+		inst.render = function() {
+			return this.constructor(props)
+		}
+	}
+
+	return inst
+}
+
+function setComponentProps(component, props) {
+	if (!component.base) {
+		if (component.componentWillMount) component.componentWillMount()
+	} else if (component.componentWillReceiveProps) {
+		component.componentWillReceiveProps()
+	}
+	component.props = props
+	renderComponent(component)
+}
+
+function renderComponent(component) {
+	let base
+
+	const renderer = component.render()
+
+	if (component.base && component.componentWillUpdate) {
+		component.componentWillUpdate()
+	}
+
+	base = _render(renderer)
+
+	if (component.base) {
+		if ( component.componentDidUpdate ) component.componentDidUpdate()		
+	} else if (component.componentDidMount) {
+		component.componentDidMount()
+	}
+
+	if ( component.base && component.base.parentNode ) {
+		component.base.parentNode.replaceChild( base, component.base )
+	}
+
+	component.base = base
+	base._component = component
 }
 
 function setAttribute(dom, name, value) {
@@ -78,19 +145,50 @@ function setAttribute(dom, name, value) {
 	}
 }
 
+// 组件部分
+class Component {
+	constructor(props = {}) {
+		this.state = {}
+		this.props = props
+	}
 
-const element = (
-	<div>
-		<h1 id="aa" style="color: red; width: 20px;" onClick={onClick} name='' data-url='url'>watson</h1>
-		<input type="text" id="inpt" class="" placeholder="我是placeholder"/>
-	</div>
-)
+	setState(stateChange) {
+		Object.assign(this.state, stateChange)
+		renderComponent(this)
+	}
+}
+
+
+class Counter extends Component {
+	constructor(props) {
+		super(props)
+		this.state = {
+			num: 1
+		}
+	}
+	onclick() {
+		console.log(this)
+		this.setState({num: this.state.num + 1})
+	}
+	render() {
+		return (
+			<div>
+				<h1 id="aa" style="color: red; width: 20px;" onClick={onClick} name='' data-url='url'>watson</h1>
+				<input type="text" id="inpt" class="" placeholder="我是placeholder"/>
+				<h1>count: {this.state.num}</h1>
+				<button onClick={() => this.onclick()}>add</button>
+			</div>
+		)
+	}
+	
+}
+
 // 方法绑定的两种方式
 // 1. onClick={onClick} runtime:函数onClick执行时this对象绑定到当前元素，推荐！
 // 2. onClick={() => onClick()} runtime:函数onClick执行时this对象指向window，不推荐！
 
 ReactDOM.render(
-	element,
+	<Counter />,
 	document.getElementById('root')
 )
 
