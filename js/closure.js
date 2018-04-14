@@ -4,8 +4,11 @@
  * @since 2018/03/20
  * @content closure -- javascript中功能最强大的抽象概念之一
  * @概念：有权访问另一个函数作用域中的变量的函数，他可以保护一个【可反复使用的局部变量】
- * @作用：定义私有变量
  * @备注：外层函数调用几次，就创建几个闭包，同时存在几个受保护的变量的副本
+ * @应用场景
+ * 		1. 模块
+ * 		2. 延时器（setTimeout）、定时器（setInterval）
+ * 		3. 监听器
  */
 
 
@@ -23,7 +26,52 @@ function Product() {
 var p1 = new Product()
 p1.setName('watson')
 console.log(p.name)
-console.log(p.getName) 
+console.log(p.getName)
+
+//模块
+//一个模块应该具有私有属性、私有方法、共有属性、共有方法，闭包能很好的将模块的共有属性、共有方法暴露出来
+var myModule = (function(window, undefined) {
+	let name = 'watson'
+	function getName() {
+		return name
+	}
+
+	return {
+		getName
+	}
+})(window)
+
+console.log(myModule.getName()) //watson
+
+//延时器（setTimeout）、定时器（setInterval）
+//闭包可以模拟块级作用域
+for (var i = 0; i<5; i++) {
+	((j) => {
+		setTimeout(() => {
+			console.log(j)
+		}, 1000*j)
+	})(i)
+}
+
+//监听器
+// 举个例子一：获取一个元素，点击它的时候变红
+// 不好的代码方式：内存泄漏，变量el无法被回收
+// 原因：对el的引用被放在一个匿名内部函数中，即在javascript对象（这个内部函数）和本地对象之间（el）创建了一个循环引用
+function addHandler() {
+	var el = document.getElementById('el')
+	el.onclick = function() {
+		el.style.backgroundColor = 'red'
+	}
+}
+
+// 推荐的代码方式
+function addHandler() {
+document.getElementById('el').onclick = function() {
+	this.style.backgroundColor = 'red'
+}
+}
+
+
 
 
 /**
@@ -49,20 +97,3 @@ console.log(p.getName)
 	   	在IE中，每当在一个 JavaScript 对象和一个本地对象之间形成循环引用时，就会发生内存泄露。
 
   */
-
-  // 举个例子一：获取一个元素，点击它的时候变红
-  // 不好的代码方式：内存泄漏，变量el无法被回收
-  // 原因：对el的引用被放在一个匿名内部函数中，即在javascript对象（这个内部函数）和本地对象之间（el）创建了一个循环引用
-  function addHandler() {
-  	var el = document.getElementById('el')
-  	el.onclick = function() {
-  		el.style.backgroundColor = 'red'
-  	}
-  }
-
-  // 推荐的代码方式
- function addHandler() {
- 	document.getElementById('el').onclick = function() {
- 		this.style.backgroundColor = 'red'
- 	}
- }

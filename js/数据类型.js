@@ -10,6 +10,7 @@
 	string
 	number
 	object
+	symble
 
 	object属性和方法
 		1.toString(): 返回对象的字符串表示
