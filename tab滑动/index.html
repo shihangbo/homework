@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>REACT-BUILD</title>
+		<link type="text/css" rel="stylesheet" href="./index.css"/>
+	<body>
+		<div class="box-163css">
+			<ul id="pagenavi" class="page">
+		        <li><a href="#http://www.helloweba.net/css.html" class="active">CSS3</a></li>
+		      	<li><a href="#http://www.helloweba.net/jquery.html">JAVASCRIPT</a></li>
+		        <li><a href="#http://www.helloweba.net/php.html">PHP</a></li>
+		        <li><a href="#http://www.helloweba.net/web.html">HTML5</a></li>
+		    </ul>
+		    <div id="slider" class="swipe">
+		      <ul class="box01_list">
+		        <li class="li_list">
+							11111
+						</li>
+						<li class="li_list">
+							22222
+						</li>
+						<li class="li_list">
+							33333
+						</li>
+						<li class="li_list">
+							44444
+						</li>
+			  </ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="./jquery-2.0.3.js"></script>
+		<script type="text/javascript" src="./index.js"></script>
+		<script type="text/javascript">
+			var page='pagenavi';
+	var mslide='slider';
+	var mtitle='emtitle';
+	arrdiv = 'arrdiv';
+
+	var as=document.getElementById(page).getElementsByTagName('a');
+
+	var tt=new TouchSlider({id:mslide,'auto':'-1',fx:'ease-out',direction:'left',speed:600,timeout:5000,'before':function(index){
+		var as=document.getElementById(this.page).getElementsByTagName('a');
+		as[this.p].className='';
+		as[index].className='active';
+		this.p=index;
+		var txt=as[index].innerText;
+		$("#"+this.page).parent().find('.emtitle').text(txt);
+		var txturl=as[index].getAttribute('href');		
+		var turl=txturl.split('#');
+		$("#"+this.page).parent().find('.go_btn').attr('href',turl[1]);
+	}});
+
+	tt.page = page;
+	tt.p = 0;
+	for(var i=0;i<as.length;i++){
+		(function(){
+			var j=i;
+			as[j].tt = tt;
+			as[j].onclick=function(){
+				this.tt.slide(j);
+				return false;
+			}
+		})();
+	}
+		</script>>
+	</body>
+</html>
