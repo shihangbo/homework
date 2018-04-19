@@ -293,5 +293,20 @@ document.getElementById('inpt').addEventListener('blur', function() {
  * @returns {HTMLElement} 更新后的DOM
  */
 function diff( dom, vnode ) {
-	// ...
+	//对比文本节点
+	let out = ''
+	if (typeof vnode === 'string') {
+		if (dom && dom.nodeType === 3) {
+			if (dom.textContent !== vnode) {
+				dom.textContent = vnode
+			}
+		} else {
+			out = document.createTextNode(vnode)
+			if (dom && dom.parentNode) {
+				dom.parentNode.replaceChild(out, dom)
+			}
+		}
+
+		return out
+	}
 }
