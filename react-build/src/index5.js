@@ -309,4 +309,6 @@ function diff( dom, vnode ) {
 
 		return out
 	}
+	//对比非文本节点
+	
 }
