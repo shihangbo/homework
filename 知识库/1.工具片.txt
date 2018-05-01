@@ -1,0 +1,90 @@
+
+
+开发语言为Java（后端）、ES6（前端）、SQL（少量使用）、JavaScript（少量使用）
+
+本指南介绍了开发工程中涉及和使用的工具。Desktop代表桌面端工具，Web代表网页端工具，Library代表基础库，Shell代表控制台命令
+
+
+JDK8（Library）
+我们后端项目开发基于jdk8
+
+我们维护的项目也包括采用jdk7的
+
+官方下载地址：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+Maven（Shell）
+我们项目是由maven进行管理的
+
+官方下载地址：https://maven.apache.org/download.cgi
+
+<mirror>
+ <id>nexus-aliyun</id>
+ <mirrorOf>*</mirrorOf>
+ <name>Nexus aliyun</name>
+ <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+</mirror>
+IntelliJ IDEA（Desktop）
+后端开发利器，推荐使用
+
+官方下载地址：https://www.jetbrains.com/idea
+
+推荐安装插件列表（排名不分先后）
+
+Lombok Plugin（目前的项目工程代码大量采用了lombok的用法，所以此插件是必备的）
+Mybatis Log Plugin（我们采用Mybatis作为持久层框架，此插件可以把mybatis输出的日志还原成完整的sql语句）
+MyBatisCodeHelper（Mybaits辅助工具，下载地址见附件）
+PlantUML integration（流程图画图利器，使用文本语法，即可生成流程图，需安装Graphviz支持）
+RestfulTookit （SpringMVC辅助工具，可以快速定位到url对应的Controller方法位置）
+Show As ... （debug时，可以快速格式化变量。因为接口交互时，经常有json字符串，对开发会有一定的帮助）
+Alibaba Java Coding Guidelines （阿里巴巴代码规范插件，开发时，尽量遵守阿里巴巴的最佳实践，提高代码质量）
+Nodejs（Shell）
+我们前端开发基于ES6语法，技术栈包括React（底层）、Ant Design（UI规范）。开发体系是基于nodejs的。前后端分离
+
+官方下载地址：https://nodejs.org/en/
+
+Yarn（Shell）
+我们主要通过Yarn命令来管理前端依赖
+
+执行下列命令即可安装
+
+npm install yarn -g
+
+WebStorm（Desktop）
+前端开发利器，推荐使用
+
+官方下载地址：https://www.jetbrains.com/webstorm
+
+SAP PowerDesign（Desktop）
+数据库建模和沟通工具
+
+Axure（Desktop）
+原型设计和沟通工具
+
+官方下载地址：https://www.axure.com/
+
+Typora（Desktop）
+Markdown编辑器，文档沟通工具
+
+官方下载地址：https://www.typora.io/#windows
+
+SourceTree（Desktop）
+我们是通过gitlab进行代码版本管理
+
+sourcetree是git命令的图形客户端之一，自身还集成了通用的版本管理流程（推荐按照此流程）
+
+官方下载地址：https://www.sourcetreeapp.com/
+
+Navicat Premium（Desktop）
+数据库访问工具，请注意安装的版本号，目前推荐使用的版本是：11.2.16.0
+
+在实际开发过程中，访问Mycat代理服务器，最新版的navicat会出现无法使用的情况。
+
+Openvpn（Desktop）
+我们目前的大部分的物理主机都部署在北京机房内，为了安全采用vpn的登录方式，需要运维人员申请账号
+
+Gitlab（Web）
+公司的项目全部用gitlab管理
+
+
+禅道（Web）
+任务分配和测试提交bug的地方
