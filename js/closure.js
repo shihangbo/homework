@@ -66,9 +66,9 @@ function addHandler() {
 
 // 推荐的代码方式
 function addHandler() {
-document.getElementById('el').onclick = function() {
-	this.style.backgroundColor = 'red'
-}
+	document.getElementById('el').onclick = function() {
+		this.style.backgroundColor = 'red'
+	}
 }
 
 
