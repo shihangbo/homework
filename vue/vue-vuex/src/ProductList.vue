@@ -9,7 +9,8 @@
             <div>{{ product.inventory - product.quantity }}</div>
             <div>
                 <el-input-number
-                    :min="0" :max="product.inventory"
+                    :min="0"
+                    :max="product.inventory"
                     v-model="product.quantity"
                     @change="handleChange">
                 </el-input-number>
@@ -19,7 +20,7 @@
 </template>
 
 <script>
-  import {mapGetters, mapMutations, mapActions} from 'vuex'
+  import {mapGetters, mapActions} from 'vuex'
 
   export default {
     data() {
@@ -47,8 +48,7 @@
       handleChange() {
         this.setProducts(this.currentProducts)
       },
-      ...mapMutations(['setProducts']),
-      ...mapActions(['getAllProducts']),
+      ...mapActions(['getAllProducts', 'setProducts', 'clearCartProducts']),
     }
   }
 </script>
