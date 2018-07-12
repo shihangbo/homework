@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vue-双向绑定原理</title>
+  </head>
+  <body>
+    <input type="text" id='a'>
+    <span id="b"></span>
+    <script>
+    var obj = {}
+    var input = document.querySelector('#a')
+    var span = document.querySelector('#b')
+
+    input.addEventListener('keyup', function(e) {
+      span.innerHTML = e.target.value
+    })
+
+    Object.defineProperty(obj, 'text', {
+      get: function() {
+        return 'hello world'
+      },
+      set: function(newValue) {
+        input.value = span.innerHTML = newValue
+      }
+    })
+    </script>
+  </body>
+</html>
