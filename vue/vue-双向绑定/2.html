@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vue-双向绑定原理</title>
+  </head>
+  <body>
+    <ul id='a'>
+      <li>apple</li>
+      <li>orange</li>
+      <li>banana</li>
+    </ul>
+    <ul id='b'></ul>
+    <script>
+      var fragment = document.createDocumentFragment()
+      var ula = document.querySelector('#a')
+      var ulb = document.querySelector('#b')
+      var child
+      while(child = ula.firstChild) {
+        fragment.appendChild(child)
+      }
+
+      ulb.appendChild(fragment)
+      console.log(ula)
+      console.log(fragment)
+    </script>
+  </body>
+</html>
