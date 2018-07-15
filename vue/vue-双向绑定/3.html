@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vue-双向绑定原理</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" id='a' v-model='text'>
+      {{text}}
+    </div>
+    <script>
+    var obj = {
+      text: 'hello world',
+    }
+
+    function compile(node, obj) {
+      if(node.nodeType == 1) {
+        var attrs = node.attributes
+        for(var i=0; i<attrs.length; i++) {
+          if(attrs[i].nodeName == 'v-model') {
+            var name = attrs[i].nodeValue
+            name = name.trim()
+            node.value = obj[name]
+            node.removeAttribute(attrs[i].nodeName)
+          }
+        }
+      }
+      if(node.nodeType == 3) {
+        var reg = /\{\{(.*)\}\}/
+        if(reg.test(node.nodeValue)) {
+          var name = RegExp.$1
+          node.nodeValue = obj[name]
+        }
+      }
+    }
+
+    var input = document.querySelector('#a')
+    compile(input, obj)
+    var text = document.querySelector('#app').lastChild
+    compile(text, obj)
+    </script>
+  </body>
+</html>
