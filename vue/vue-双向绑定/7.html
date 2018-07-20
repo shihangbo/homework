@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>vue-双向绑定原理</title>
+  </head>
+  <body>
+    <div id="app">
+      <input type="text" id='' v-model='text'>
+      {{ text }}
+    </div>
+
+    <script>
+    function Dep() {
+      this.subs = []
+    }
+    Dep.prototype = {
+      addSub: function(sub) {
+        this.subs.push(sub)
+      },
+      notify: function() {
+        this.subs.forEach(function(sub) {
+          sub.update()
+        })
+      }
+    }
+
+    function Watcher(node, vm, name, type) {
+      this.node = node
+      this.vm = vm 
+      this.name = name
+      this.type = type
+      Dep.target = this
+
+      this.update()
+      Dep.target = null
+    }
+    Watcher.prototype = {
+      update: function() {
+        if (this.type == 'input') {
+          var value = this.vm[this.name]
+          this.node.value = value
+        }
+        if (this.type == 'text') {
+          var value = this.vm[this.name]
+          this.node.nodeValue = value
+        }
+        
+      }
+    }
+
+
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        text: 'hello world'
+      }
+    })
+
+    function Vue(options) {
+      console.log(this)
+      this.el = options.el
+      this.data = options.data
+      observe(this.data, this)
+      var nodes = document.querySelector(this.el)
+      var dom = node2fragment(nodes, this)
+      nodes.appendChild(dom)
+    }
+    Vue.prototype = {
+
+    }
+
+    function node2fragment(nodes, vm) {
+      var child, fragment = document.createDocumentFragment()
+      while(child = nodes.firstChild) {
+        compile(child, vm)
+        fragment.appendChild(child)
+      }
+      return fragment
+    }
+
+    function compile(node, obj) {
+      if(node.nodeType == 1) {
+        var attrs = node.attributes
+        for(var i=0; i<attrs.length; i++) {
+          if(attrs[i].nodeName == 'v-model') {
+            var name = attrs[i].nodeValue
+            name = name.trim()
+            // node.value = obj.data[name]
+            node.removeAttribute(attrs[i].nodeName)
+            new Watcher(node, obj, name, 'input')
+
+            node.addEventListener('keyup', function(e) {
+              var inputValue = e.target.value
+              obj[name] = inputValue
+            })
+          }
+        }
+      }
+      if(node.nodeType == 3) {
+        var reg = /\{\{(.*)\}\}/
+        if(reg.test(node.nodeValue)) {
+          var name = RegExp.$1
+          name = name.trim()
+          // node.nodeValue = obj.data[name]
+          new Watcher(node, obj, name, 'text')
+        }
+      }
+    }
+
+    //vm数据绑定
+    function observe(obj, vm) {
+      Object.keys(obj).forEach(function(key) {
+        var dep = new Dep()
+        Object.defineProperty(vm, key, {
+          get: function() {
+            if (Dep.target != null) {
+              dep.addSub(Dep.target)
+            }
+            return obj[key]
+          },
+          set: function(newValue) {
+            if (obj[key] == newValue) {
+              return
+            }
+            obj[key] = newValue
+            dep.notify()
+          }
+        })
+      })
+    }
+
+    </script>
+  </body>
+</html>
