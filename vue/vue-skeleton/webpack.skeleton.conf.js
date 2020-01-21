@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
-
+console.log('watson1')
 module.exports = {
   target: 'node',
   entry: {

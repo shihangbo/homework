@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+console.log('watson')
 
 module.exports = {
   entry: './src/main.js',
